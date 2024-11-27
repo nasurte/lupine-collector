@@ -215,12 +215,13 @@ if(count(args)>0 && args[0].to_lower_case().contains_text("help")){
 
 					   //skid row advs
 
-			if (!have_familiar($familiar[left-hand man])){
+			if (have_familiar($familiar[left-hand man])){
 				use_familiar($familiar[left-hand man]);
 			}
 			else if(have_familiar($familiar[teddy borg])){
 				use_familiar($familiar[teddy borg]);
 			}
+			
 			cli_execute("maximize -ML, 200 bonus june cleaver, 100 bonus designer sweatpants");
 
 			while(my_hp()<my_maxhp()){
