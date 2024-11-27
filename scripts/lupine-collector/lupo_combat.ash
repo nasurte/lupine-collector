@@ -14,14 +14,22 @@ void main(int initround, monster foe, string page){
 	int aspenBlowsNeeded;
 	int stoneBlowsNeeded;
 	int blowsDone;
+	int currentBreath;
 	float aspenHouseHP;
 	float stoneHouseHP;
 
 
 	switch(foe){
 		case $monster[Abcrusher 4000&trade;]:
-		if(((!(get_property("olfactedMonster")=="Abcrusher 4000™"))||(have_effect($effect[On the Trail])==0))&&(get_property("_olfactionsUsed").to_int() < 3)){
-			use_skill($skill[Transcendent Olfaction]);
+		if(have_skill($skill[Transcendent Olfaction])&&(get_property("olfactedMonster")=="Abcrusher 4000™"||get_property("_olfactionsUsed").to_int()<3)){
+			if(((!(get_property("olfactedMonster")=="Abcrusher 4000™"))||(have_effect($effect[On the Trail])==0))&&(get_property("_olfactionsUsed").to_int() < 3)){
+				use_skill($skill[Transcendent Olfaction]);
+			}
+		}
+		else{
+			if(have_skill($skill[Gallapagosian Mating Call])&&!(get_property("_gallapagosMonster")=="Abcrusher 4000&trade;")){
+				use_skill($skill[Gallapagosian Mating Call]);
+			}
 		}
 		if (!(item_amount($item[porquoise-handled sixgun])==0)){
 			throw_item($item[porquoise-handled sixgun]);
@@ -58,8 +66,10 @@ void main(int initround, monster foe, string page){
 
 
 		case $monster[rack of free weights]:
-		if((my_familiar() == $familiar[Nosy Nose])&&!(get_property("nosyNoseMonster")=="rack of free weights")){
-			use_skill($skill[Get a Good Whiff of This Guy]);
+		if(have_skill($skill[Transcendent Olfaction])&&(get_property("olfactedMonster")=="Abcrusher 4000™"||get_property("_olfactionsUsed").to_int()<3)){
+			if(have_skill($skill[Gallapagosian Mating Call])&&!(get_property("_gallapagosMonster")=="rack of free weights")){
+				use_skill($skill[Gallapagosian Mating Call]);
+			}
 		}
 		if (!(item_amount($item[porquoise-handled sixgun])==0)){
 			throw_item($item[porquoise-handled sixgun]);
@@ -76,8 +86,10 @@ void main(int initround, monster foe, string page){
 
 
 		case $monster[treadmill]:
-		if(have_skill($skill[Gallapagosian Mating Call])&&!(get_property("_gallapagosMonster")=="treadmill")){
-			use_skill($skill[Gallapagosian Mating Call]);
+		if(have_skill($skill[Transcendent Olfaction])&&(get_property("olfactedMonster")=="Abcrusher 4000™"||get_property("_olfactionsUsed").to_int()<3)){
+			if((my_familiar() == $familiar[Nosy Nose])&&!(get_property("nosyNoseMonster")=="treadmill")){
+				use_skill($skill[Get a Good Whiff of This Guy]);
+			}
 		}
 		if (!(item_amount($item[porquoise-handled sixgun])==0)){
 			throw_item($item[porquoise-handled sixgun]);
@@ -104,19 +116,38 @@ void main(int initround, monster foe, string page){
 		}
 		print(wolfScore);
 		
-		if(contains_text(page,"Breath: 1/")||contains_text(page,"Breath: 0/")){
+		if(wolfScore<to_int(get_property("unleashThreshold"))){
+			if(contains_text(page,"Breath: 1/")||contains_text(page,"Breath: 0/")){
+				if(contains_text(page,`title="Huff"`)){
+					if(current_round() > 0) use_skill($skill[Huff]);
+				}
+			}
 			if(contains_text(page,`title="Huff"`)){
-				if(current_round() > 0) use_skill($skill[Huff]);
+				catch{
+					if(current_round() > 0) use_skill($skill[Puff]);
+				}
 			}
 		}
-		if(contains_text(page,`title="Huff"`)){
-			catch{
-				if(current_round() > 0) use_skill($skill[Puff]);
+		else{
+			if (get_property("wolfScore").to_int()==0) set_property("wolfScore",wolfScore.to_string());
+			print(wolfScore+" should be enough to hit our goal of "+get_property("unleashThreshold"),"blue");
+			matcher breathMatcher = create_matcher("Breath: (\\d+)/",page);
+			if (breathMatcher.find()){
+				currentBreath = breathMatcher.group(1).to_int();
+			}
+			if(!contains_text(page,"Breath: "+currentBreath+"/"+currentBreath)){
+				if(contains_text(page,`title="Huff"`)){
+					if(current_round() > 0) use_skill($skill[Huff]);
+				}
+			}
+			if(contains_text(page,`title="Huff"`)){
+				catch{
+					if(current_round() > 0) use_skill($skill[Puff]);
+				}
 			}
 		}
 		break;
-
-
+		
 		case $monster[cold ironwood house]:
 		case $monster[glowing ash house]:
 		case $monster[pitch pine house]:
@@ -188,7 +219,11 @@ void main(int initround, monster foe, string page){
 		else{
 			if (get_property("wolfScore").to_int()==0) set_property("wolfScore",wolfScore.to_string());
 			print(wolfScore+" should be enough to hit our goal of "+get_property("unleashThreshold"),"blue");
-			if(contains_text(page,"Breath: 1/")||contains_text(page,"Breath: 0/")){
+			matcher breathMatcher = create_matcher("Breath: (\\d+)/",page);
+			if (breathMatcher.find()){
+				currentBreath = breathMatcher.group(1).to_int();
+			}
+			if(!contains_text(page,"Breath: "+currentBreath+"/"+currentBreath)){
 				if(contains_text(page,`title="Huff"`)){
 					if(current_round() > 0) use_skill($skill[Huff]);
 				}
@@ -255,7 +290,11 @@ void main(int initround, monster foe, string page){
 		else{
 			if (get_property("wolfScore").to_int()==0) set_property("wolfScore",wolfScore.to_string());
 			print(wolfScore+" should be enough to hit our goal of "+get_property("unleashThreshold"),"blue");
-			if(contains_text(page,"Breath: 1/")||contains_text(page,"Breath: 0/")){
+			matcher breathMatcher = create_matcher("Breath: (\\d+)/",page);
+			if (breathMatcher.find()){
+				currentBreath = breathMatcher.group(1).to_int();
+			}
+			if(!contains_text(page,"Breath: "+currentBreath+"/"+currentBreath)){
 				if(contains_text(page,`title="Huff"`)){
 					if(current_round() > 0) use_skill($skill[Huff]);
 				}

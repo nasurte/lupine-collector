@@ -126,9 +126,16 @@ void main(int initround, monster foe, string page){
     int pigCount = -1;
     switch(foe){
         case $monster[Abcrusher 4000&trade;]:
-            if(((!(get_property("olfactedMonster")=="Abcrusher 4000™"))||(have_effect($effect[On the Trail])==0))&&(get_property("_olfactionsUsed").to_int() < 3)){
-                use_skill($skill[Transcendent Olfaction]);
-            }
+			if(have_skill($skill[Transcendent Olfaction])&&(get_property("olfactedMonster")=="Abcrusher 4000™"||get_property("_olfactionsUsed").to_int()<3)){
+				if(((!(get_property("olfactedMonster")=="Abcrusher 4000™"))||(have_effect($effect[On the Trail])==0))&&(get_property("_olfactionsUsed").to_int() < 3)){
+					use_skill($skill[Transcendent Olfaction]);
+				}
+			}
+			else{
+				if(have_skill($skill[Gallapagosian Mating Call])&&!(get_property("_gallapagosMonster")=="Abcrusher 4000&trade;")){
+					use_skill($skill[Gallapagosian Mating Call]);
+				}
+			}
             
         case $monster[Escalatormaster&trade;]:
             if (!(item_amount($item[porquoise-handled sixgun])==0)){
@@ -150,9 +157,11 @@ void main(int initround, monster foe, string page){
             break;
 
         case $monster[rack of free weights]:
-            if((my_familiar() == $familiar[Nosy Nose])&&!(get_property("nosyNoseMonster")=="rack of free weights")){
-                use_skill($skill[Get a Good Whiff of This Guy]);
-            }
+			if(have_skill($skill[Transcendent Olfaction])&&(get_property("olfactedMonster")=="Abcrusher 4000™"||get_property("_olfactionsUsed").to_int()<3)){
+				if(have_skill($skill[Gallapagosian Mating Call])&&!(get_property("_gallapagosMonster")=="rack of free weights")){
+					use_skill($skill[Gallapagosian Mating Call]);
+				}
+			}
             if (!(item_amount($item[porquoise-handled sixgun])==0)){
                 throw_item($item[porquoise-handled sixgun]);
             }
@@ -167,9 +176,11 @@ void main(int initround, monster foe, string page){
             break;
 
         case $monster[treadmill]:
-            if(have_skill($skill[Gallapagosian Mating Call])&&!(get_property("_gallapagosMonster")=="treadmill")){
-                use_skill($skill[Gallapagosian Mating Call]);
-            }  
+			if(have_skill($skill[Transcendent Olfaction])&&(get_property("olfactedMonster")=="Abcrusher 4000™"||get_property("_olfactionsUsed").to_int()<3)){
+				if((my_familiar() == $familiar[Nosy Nose])&&!(get_property("nosyNoseMonster")=="treadmill")){
+					use_skill($skill[Get a Good Whiff of This Guy]);
+				}
+			}  
             if (!(item_amount($item[porquoise-handled sixgun])==0)){
                 throw_item($item[porquoise-handled sixgun]);
             }
@@ -225,18 +236,30 @@ void main(int initround, monster foe, string page){
 			if(wolfScore >= get_property("unleashThreshold").to_int()){
 				if (get_property("wolfScore").to_int()==0) set_property("wolfScore",wolfScore.to_string());
 				print(wolfScore+" should be enough to hit our goal of "+get_property("unleashThreshold"),"blue");
+				if(contains_text(page,`title="Huff"`)){
+					catch{
+						if(current_round() > 0) use_skill($skill[Huff]);
+					}
+				}
+				if(contains_text(page,`title="Huff"`)){
+					catch{
+						if(current_round() > 0) use_skill($skill[Puff]);
+					}
+				}
 			}
-            if(contains_text(page,"Breath: 2/")||contains_text(page,"Breath: 1/")||contains_text(page,"Breath: 0/")){
-                if(contains_text(page,`title="Huff"`)){
-                    use_skill($skill[Huff]);
-                }
-            }
-            if(contains_text(page,`title="Huff"`)){
-                catch{
-                    if(current_round() > 0)
-                        use_skill($skill[Puff]);
-                }
-            }
+			else{
+				if(contains_text(page,"Breath: 2/")||contains_text(page,"Breath: 1/")||contains_text(page,"Breath: 0/")){
+					if(contains_text(page,`title="Huff"`)){
+						use_skill($skill[Huff]);
+					}
+				}
+				if(contains_text(page,`title="Huff"`)){
+					catch{
+						if(current_round() > 0)
+							use_skill($skill[Puff]);
+					}
+				}
+			}
         }
         
         else{
