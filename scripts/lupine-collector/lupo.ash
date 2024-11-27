@@ -111,7 +111,7 @@ if(count(args)>0 && args[0].to_lower_case().contains_text("help")){
 			if(have_familiar($familiar[reagnimated gnome])){
 				use_familiar($familiar[reagnimated gnome]);
 			}
-			else if(have_familiar($familiar[Nosy Nose])){
+			else if(have_familiar($familiar[Nosy Nose])&&(have_skill($skill[Transcendent Olfaction])&&(get_property("olfactedMonster")=="Abcrusher 4000™"||get_property("_olfactionsUsed").to_int()<3))){
 				use_familiar($familiar[Nosy Nose]);
 			}
 
@@ -133,23 +133,49 @@ if(count(args)>0 && args[0].to_lower_case().contains_text("help")){
 
 			if (timer>12){
 				for i from timer to 13{
-				if (timer<24){
-				howlImproved = true;
-				}
-				if (!howlImproved){
-				set_property("choiceAdventure830",3);
-				set_property("choiceAdventure834",2);
-				}
-				else if (((wolfMaxBreath<6)&&(timer>17))||((wolfOffense>23)&&(wolfMaxBreath<9))){
-				print("timer: "+timer+", lung capacity: "+wolfMaxBreath);
-				set_property("choiceAdventure830",3);
-				set_property("choiceAdventure834",3);
-				}
-				else {
-				set_property("choiceAdventure830",1);
-				set_property("choiceAdventure832",1);
-				}
 
+				//Cooldown:
+				//830-1;832-1:+5 Offense
+				//830-1;832-2:+5 Defense
+				//830-3;834-2:Improved Howling
+				//830-3;834-3:+3 Lung Capacity
+				
+				if(timer==25||timer==19||timer==13){
+					if (timer<24){
+						howlImproved = true;
+					}
+					if (!howlImproved){
+						set_property("choiceAdventure830",3);
+						set_property("choiceAdventure834",2);
+					}
+					else if (have_skill($skill[Transcendent Olfaction])&&(get_property("olfactedMonster")=="Abcrusher 4000™"||get_property("_olfactionsUsed").to_int()<3)){
+						if((wolfMaxBreath<6 && timer>17)||(wolfOffense>23 && wolfMaxBreath<9)){
+							set_property("choiceAdventure830",3);
+							set_property("choiceAdventure834",3);
+						}
+						else{
+							set_property("choiceAdventure830",1);
+							set_property("choiceAdventure832",1);
+						}
+					}
+					else{
+						if((wolfMaxBreath<9 && timer<17)|| wolfMaxBreath<6){
+							set_property("choiceAdventure830",3);
+							set_property("choiceAdventure834",3);
+						}
+						else if((wolfDefense<19 && timer<17)|| wolfDefense<28){
+							set_property("choiceAdventure830",1);
+							set_property("choiceAdventure832",2);
+						}
+						else{
+							set_property("choiceAdventure830",1);
+							set_property("choiceAdventure832",1);
+						}
+					}
+				}
+				
+				//equip juggling
+				
 				if (item_amount($item[everfull dart holster])>0 && !have_effect($effect[everything looks red]).to_boolean()&& !have_equipped($item[everfull dart holster])) equip(accBuffer,$item[everfull dart holster]);
 				if (have_effect($effect[everything looks red]).to_boolean()&& have_equipped($item[everfull dart holster])) equip(accBuffer,bufferAcc);
 				if (item_amount($item[jurassic parka])>0 && !have_effect($effect[everything looks yellow]).to_boolean()&&!have_equipped($item[jurassic parka])){
@@ -253,6 +279,9 @@ if(count(args)>0 && args[0].to_lower_case().contains_text("help")){
 		}
 	}
 	finally{
+		//results and stuff
+		//lie to mafia so that garbo doesn't complain later
+		set_property("_lastCombatLost","false"); 
 		print('should be done','blue');
 		string plural;
 		int masksUsed=item_amount($item[Outer Wolf&trade; cologne])-startingCologne;
