@@ -69,5 +69,5 @@ This situation happened exactly once when testing. Seemed like it resulted from 
 
 > Best class?
 
-Turtle Tamer, obviously. If you mean which class works best with the script, there should be no noticable differences between them, but going with Myst/Moxie classes will probably end up saving you some meat on restores solely because the gym monsters scale.
+Turtle Tamer, obviously. If you mean which class works best with the script, there should be no noticeable differences between them, but going with Myst/Moxie classes will probably end up saving you some meat on restores solely because the gym monsters scale.
 # 🐢
