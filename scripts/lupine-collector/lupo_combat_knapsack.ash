@@ -126,16 +126,10 @@ void main(int initround, monster foe, string page){
     int pigCount = -1;
     switch(foe){
         case $monster[Abcrusher 4000&trade;]:
-			if(have_skill($skill[Transcendent Olfaction])&&(get_property("olfactedMonster")=="Abcrusher 4000™"||get_property("_olfactionsUsed").to_int()<3)){
-				if(((!(get_property("olfactedMonster")=="Abcrusher 4000™"))||(have_effect($effect[On the Trail])==0))&&(get_property("_olfactionsUsed").to_int() < 3)){
-					use_skill($skill[Transcendent Olfaction]);
-				}
+			if(have_skill($skill[Gallapagosian Mating Call])&&!(get_property("_gallapagosMonster")=="Abcrusher 4000&trade;")){
+				use_skill($skill[Gallapagosian Mating Call]);
 			}
-			else{
-				if(have_skill($skill[Gallapagosian Mating Call])&&!(get_property("_gallapagosMonster")=="Abcrusher 4000&trade;")){
-					use_skill($skill[Gallapagosian Mating Call]);
-				}
-			}
+
             
         case $monster[Escalatormaster&trade;]:
             if (!(item_amount($item[porquoise-handled sixgun])==0)){
@@ -157,11 +151,6 @@ void main(int initround, monster foe, string page){
             break;
 
         case $monster[rack of free weights]:
-			if(have_skill($skill[Transcendent Olfaction])&&(get_property("olfactedMonster")=="Abcrusher 4000™"||get_property("_olfactionsUsed").to_int()<3)){
-				if(have_skill($skill[Gallapagosian Mating Call])&&!(get_property("_gallapagosMonster")=="rack of free weights")){
-					use_skill($skill[Gallapagosian Mating Call]);
-				}
-			}
             if (!(item_amount($item[porquoise-handled sixgun])==0)){
                 throw_item($item[porquoise-handled sixgun]);
             }
@@ -175,12 +164,7 @@ void main(int initround, monster foe, string page){
 			}
             break;
 
-        case $monster[treadmill]:
-			if(have_skill($skill[Transcendent Olfaction])&&(get_property("olfactedMonster")=="Abcrusher 4000™"||get_property("_olfactionsUsed").to_int()<3)){
-				if((my_familiar() == $familiar[Nosy Nose])&&!(get_property("nosyNoseMonster")=="treadmill")){
-					use_skill($skill[Get a Good Whiff of This Guy]);
-				}
-			}  
+        case $monster[treadmill]: 
             if (!(item_amount($item[porquoise-handled sixgun])==0)){
                 throw_item($item[porquoise-handled sixgun]);
             }
