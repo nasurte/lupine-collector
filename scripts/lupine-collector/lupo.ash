@@ -35,8 +35,9 @@ if(count(args)>0 && args[0].to_lower_case().contains_text("help")){
 	set_property("hpAutoRecovery","0.05");
 	set_property("mpAutoRecoveryTarget","1.0");
 	set_property("mpAutoRecovery","0.3");
-
-	if(have_effect($effect[angering pizza purists]).to_boolean()) cli_execute("shrug angering pizza purists");
+	
+	cli_execute("mcd 0");
+	foreach buff in my_effects() if(buff.numeric_modifier("Monster Level")>0) cli_execute("shrug "+buff);
 	
 
 	int startingLupines=item_amount($item[lupine appetite hormones]);
@@ -51,221 +52,225 @@ if(count(args)>0 && args[0].to_lower_case().contains_text("help")){
 				run_turn();
 				while(in_multi_fight()) run_combat();
 			}
-			if (!visit_url('place.php?whichplace=ioty2014_wolf').contains_text("Time Left: 30")&&!lupoContinue||visit_url('place.php?whichplace=ioty2014_wolf').contains_text("All good things")){
+			if (!visit_url('place.php?whichplace=ioty2014_wolf').contains_text("Time Left: 30")&&!lupoContinue||(visit_url('place.php?whichplace=ioty2014_wolf').contains_text("All good things")&& run>1)){
+			
 				if(item_amount($item[grimstone mask])==0){
 					buy($item[grimstone mask],1,30000);
 				}
 				set_property('choiceAdventure829',2);
 				use($item[grimstone mask]);
-			}
-			cli_execute('outfit birthday suit');
-	
-						 //~~setting a bunch of stuff that mafia doesn't have prefs for~~
-						 //mafia now has prefs for these but iirc some of them are slightly off in some way
-
-			string page;
-			page=visit_url('place.php?whichplace=ioty2014_wolf');
-			matcher offenseMatcher = create_matcher("Offense: (\\d+)",page);
-			matcher defenseMatcher = create_matcher("Defense: (\\d+)",page);
-			matcher breathMatcher = create_matcher("Breath: (\\d+)/(\\d+)",page);
-			matcher timerMatcher = create_matcher("Time Left: (\\d+)",page);
-			 
-			int timer;
-			if(timerMatcher.find()){
-				timer=timerMatcher.group(1).to_int();
-			}
-			print(timer);
-			
-			int wolfDefense;
-			if(defenseMatcher.find()){
-				wolfDefense=defenseMatcher.group(1).to_int();
-			}
-			print(wolfDefense);
-			 
-			int wolfOffense;
-			if(offenseMatcher.find()){
-				wolfOffense=offenseMatcher.group(1).to_int();
-			}
-			print(wolfOffense);
-			 
-			int wolfMaxBreath;
-			if(breathMatcher.find()){
-				wolfMaxBreath=breathMatcher.group(2).to_int();
-			}
-			print(wolfMaxBreath);
-			 
-			boolean howlImproved;
-			if (timer<25){
-				howlImproved=true;
-			}
-			else {
-				howlImproved=false;
-			}
-
-						 //Gym advs
-
-			if(my_hp()<my_maxhp()){
-				use_skill($skill[cannelloni cocoon]);
-			}
-			
-			if(have_familiar($familiar[reagnimated gnome])){
-				use_familiar($familiar[reagnimated gnome]);
-			}
-			else if(have_familiar($familiar[Nosy Nose])&&(have_skill($skill[Transcendent Olfaction])&&(get_property("olfactedMonster")=="Abcrusher 4000™"||get_property("_olfactionsUsed").to_int()<3))){
-				use_familiar($familiar[Nosy Nose]);
-			}
-
-			string maximizerStuff;
-			maximizerStuff+=" item drop, -equip broken champagne bottle, 400 bonus thumb ring, 90 bonus mr. cheeng's spectacles, 400 bonus carnivorous potted plant";
-			if(my_familiar()==$familiar[reagnimated gnome]) maximizerStuff+=", +equip gnomish housemaid's kgnee, 10 familiar weight";
-			cli_execute("maximize"+maximizerStuff);
-			item bufferShirt=equipped_item($slot[shirt]);
-			item bufferAcc;
-			slot accBuffer;
-			if(have_equipped($item[mafia thumb ring])){
-				accBuffer=$slot[acc1];
-				bufferAcc=$item[mafia thumb ring];
-			}
-			else{
-				accBuffer=$slot[acc3];
-				bufferAcc=equipped_item($slot[acc3]);
-			}
-
-			if (timer>12){
-				for i from timer to 13{
-
-				//Cooldown:
-				//830-1;832-1:+5 Offense
-				//830-1;832-2:+5 Defense
-				//830-3;834-2:Improved Howling
-				//830-3;834-3:+3 Lung Capacity
 				
-				if(timer==25||timer==19||timer==13){
-					if (timer<24){
-						howlImproved = true;
-					}
-					if (!howlImproved){
-						set_property("choiceAdventure830",3);
-						set_property("choiceAdventure834",2);
-					}
-					else if (have_skill($skill[Transcendent Olfaction])&&(get_property("olfactedMonster")=="Abcrusher 4000™"||get_property("_olfactionsUsed").to_int()<3)){
-						if((wolfMaxBreath<6 && timer>17)||(wolfOffense>23 && wolfMaxBreath<9)){
-							set_property("choiceAdventure830",3);
-							set_property("choiceAdventure834",3);
-						}
-						else{
-							set_property("choiceAdventure830",1);
-							set_property("choiceAdventure832",1);
-						}
-					}
-					else{
-						if((wolfMaxBreath<9 && timer<17)|| wolfMaxBreath<6){
-							set_property("choiceAdventure830",3);
-							set_property("choiceAdventure834",3);
-						}
-						else if((wolfDefense<19 && timer<17)|| wolfDefense<28){
-							set_property("choiceAdventure830",1);
-							set_property("choiceAdventure832",2);
-						}
-						else{
-							set_property("choiceAdventure830",1);
-							set_property("choiceAdventure832",1);
-						}
-					}
-				}
-				
-				//equip juggling
-				
-				if (item_amount($item[everfull dart holster])>0 && !have_effect($effect[everything looks red]).to_boolean()&& !have_equipped($item[everfull dart holster])) equip(accBuffer,$item[everfull dart holster]);
-				if (have_effect($effect[everything looks red]).to_boolean()&& have_equipped($item[everfull dart holster])) equip(accBuffer,bufferAcc);
-				if (item_amount($item[jurassic parka])>0 && !have_effect($effect[everything looks yellow]).to_boolean()&&!have_equipped($item[jurassic parka])){
-					equip($item[jurassic parka]);
-					cli_execute("parka acid");
-				}
-				if (have_effect($effect[everything looks yellow]).to_boolean() && have_equipped($item[jurassic parka])) equip(bufferShirt);
-				
-				timer = timer - 1;
-				adv1($location[The Inner Wolf Gym],-1,"");
+				cli_execute('outfit birthday suit');
+		
+							 //~~setting a bunch of stuff that mafia doesn't have prefs for~~
+							 //mafia now has prefs for these but iirc some of them are slightly off in some way
 
-				//updating stats
-
+				string page;
 				page=visit_url('place.php?whichplace=ioty2014_wolf');
 				matcher offenseMatcher = create_matcher("Offense: (\\d+)",page);
 				matcher defenseMatcher = create_matcher("Defense: (\\d+)",page);
 				matcher breathMatcher = create_matcher("Breath: (\\d+)/(\\d+)",page);
+				matcher timerMatcher = create_matcher("Time Left: (\\d+)",page);
+				 
+				int timer;
+				if(timerMatcher.find()){
+					timer=timerMatcher.group(1).to_int();
+				}
+				print(timer);
 				
+				int wolfDefense;
 				if(defenseMatcher.find()){
 					wolfDefense=defenseMatcher.group(1).to_int();
 				}
 				print(wolfDefense);
 				 
+				int wolfOffense;
 				if(offenseMatcher.find()){
 					wolfOffense=offenseMatcher.group(1).to_int();
 				}
 				print(wolfOffense);
 				 
+				int wolfMaxBreath;
 				if(breathMatcher.find()){
 					wolfMaxBreath=breathMatcher.group(2).to_int();
 				}
 				print(wolfMaxBreath);
-
+				 
+				boolean howlImproved;
+				if (timer<25){
+					howlImproved=true;
 				}
-			}
-
-
-					   //skid row advs
-
-			if (have_familiar($familiar[left-hand man])){
-				use_familiar($familiar[left-hand man]);
-			}
-			else if(have_familiar($familiar[teddy borg])){
-				use_familiar($familiar[teddy borg]);
-			}
-			
-			cli_execute("maximize -ML, 200 bonus june cleaver, 100 bonus designer sweatpants");
-
-			while(my_hp()<my_maxhp()){
-				use_skill($skill[cannelloni cocoon]);
-			}
-			if(!lupoContinue||run>1) set_property("wolfScore","0");
-			
-			if(timer>2) for i from 1 to timer/3{
-			
-				if (lupoUseWishes && have_equipped($item[HOA regulation book]) && have_effect($effect[Offhand Remarkable])<4){
-					if(item_amount($item[cursed monkey's paw])>0&&get_property("_monkeyPawWishesUsed").to_int()<5){
-						cli_execute("monkeypaw effect offhand remarkable");
-					}else{
-						retrieve_item($item[pocket wish],1);
-						cli_execute("genie effect offhand remarkable");
-					}
+				else {
+					howlImproved=false;
 				}
 
-				visit_url('place.php?whichplace=ioty2014_wolf&action=wolf_houserun'); 
-				set_property("housesEaten","0");
-				use_skill($skill[Puff]);
-				while(in_multi_fight()){
-					run_combat();
-				}
-				
-				while(get_property("_sweatOutSomeBoozeUsed").to_int()<3&&get_property("sweat").to_int()>24&&my_inebriety()>0){
-					cli_execute('/cast sweat out some booze');
-				}
-				if(get_property("sweat").to_int()>49){
-					cli_execute('/cast make sweat-ade');
-				}
-				if(get_property("sweat").to_int()>49){
-					cli_execute('/cast make sweat-ade');
-				}
-				
-				while(my_hp()<my_maxhp() && get_property("wolfScore").to_int()<get_property("unleashThreshold").to_int()){
+							 //Gym advs
+
+				if(my_hp()<my_maxhp()){
 					use_skill($skill[cannelloni cocoon]);
 				}
 				
-
-				if(get_property("_juneCleaverFightsLeft")=='0'){
-					adv1($location[Noob Cave],-1,"");
+				foreach fam in $familiars[reagnimated gnome, shorter-order cook, cookbookbat, jill-of-all-trades, mini kiwi,jumpsuited hound dog, baby gravy fairy] if(have_familiar(fam)){
+					use_familiar(fam);
+					break;
 				}
 
+				string maximizerStuff;
+				maximizerStuff+=" item drop, -equip broken champagne bottle, -equip papier-mitre, 400 bonus thumb ring, 90 bonus mr. cheeng's spectacles, 400 bonus carnivorous potted plant, 300 bonus [9133],150 bonus can of mixed everything";
+				switch(my_familiar()){
+					case $familiar[reagnimated gnome]:
+					maximizerStuff+=", +equip gnomish housemaid's kgnee, 10 familiar weight";
+					break;
+					case $familiar[shorter-order cook]:
+					maximizerStuff+=", +equip blue plate";
+					break;
+					case $familiar[jill-of-all-trades]:
+					maximizerStuff+=", +equip LED candle";
+					break;
+					case $familiar[mini kiwi]:
+					maximizerStuff+=", 7 familiar weight";
+					break;
+					}
+				cli_execute("maximize"+maximizerStuff);
+				if (my_familiar()==$familiar[jill-of-all-trades]) cli_execute("jillcandle item");
+				item bufferShirt=equipped_item($slot[shirt]);
+				item bufferAcc;
+				slot accBuffer;
+				if(have_equipped($item[mafia thumb ring])){
+					accBuffer=$slot[acc1];
+					bufferAcc=$item[mafia thumb ring];
+				}
+				else{
+					accBuffer=$slot[acc3];
+					bufferAcc=equipped_item($slot[acc3]);
+				}
+
+				if (timer>12){
+					for i from timer to 13{
+
+					//Cooldown:
+					//830-1;832-1:+5 Offense
+					//830-1;832-2:+5 Defense
+					//830-3;834-2:Improved Howling
+					//830-3;834-3:+3 Lung Capacity
+					
+					if(timer==25||timer==19||timer==13){
+						if (timer<24){
+							howlImproved = true;
+						}
+						if (!howlImproved){
+							set_property("choiceAdventure830",3);
+							set_property("choiceAdventure834",2);
+						}
+						else{
+							if((wolfMaxBreath<9 && timer<17)|| wolfMaxBreath<6){
+								set_property("choiceAdventure830",3);
+								set_property("choiceAdventure834",3);
+							}
+							else if((wolfDefense<19 && timer<17)|| wolfDefense<28){
+								set_property("choiceAdventure830",1);
+								set_property("choiceAdventure832",2);
+							}
+							else{
+								set_property("choiceAdventure830",1);
+								set_property("choiceAdventure832",1);
+							}
+						}
+					}
+					
+					//equip juggling
+					
+					if (item_amount($item[everfull dart holster])>0 && !have_effect($effect[everything looks red]).to_boolean()&& !have_equipped($item[everfull dart holster])) equip(accBuffer,$item[everfull dart holster]);
+					if (have_effect($effect[everything looks red]).to_boolean()&& have_equipped($item[everfull dart holster])) equip(accBuffer,bufferAcc);
+					if (item_amount($item[jurassic parka])>0 && !have_effect($effect[everything looks yellow]).to_boolean()&&!have_equipped($item[jurassic parka])){
+						equip($item[jurassic parka]);
+						cli_execute("parka acid");
+					}
+					if (have_effect($effect[everything looks yellow]).to_boolean() && have_equipped($item[jurassic parka])) equip(bufferShirt);
+					
+					timer = timer - 1;
+					adv1($location[The Inner Wolf Gym],-1,"");
+
+					//updating stats
+
+					page=visit_url('place.php?whichplace=ioty2014_wolf');
+					matcher offenseMatcher = create_matcher("Offense: (\\d+)",page);
+					matcher defenseMatcher = create_matcher("Defense: (\\d+)",page);
+					matcher breathMatcher = create_matcher("Breath: (\\d+)/(\\d+)",page);
+					
+					if(defenseMatcher.find()){
+						wolfDefense=defenseMatcher.group(1).to_int();
+					}
+					print(wolfDefense);
+					 
+					if(offenseMatcher.find()){
+						wolfOffense=offenseMatcher.group(1).to_int();
+					}
+					print(wolfOffense);
+					 
+					if(breathMatcher.find()){
+						wolfMaxBreath=breathMatcher.group(2).to_int();
+					}
+					print(wolfMaxBreath);
+
+					}
+				}
+
+
+						   //skid row advs
+
+				if (have_familiar($familiar[left-hand man])){
+					use_familiar($familiar[left-hand man]);
+				}
+				else if(have_familiar($familiar[teddy borg])){
+					use_familiar($familiar[teddy borg]);
+				}
+				
+				cli_execute("maximize -ML, 200 bonus june cleaver, 100 bonus designer sweatpants");
+
+				while(my_hp()<my_maxhp()){
+					use_skill($skill[cannelloni cocoon]);
+				}
+				if(!lupoContinue||run>1) set_property("wolfScore","0");
+				
+				if(timer>2) for i from 1 to timer/3{
+				
+					if (lupoUseWishes && have_equipped($item[HOA regulation book]) && have_effect($effect[Offhand Remarkable])<4){
+						if(item_amount($item[cursed monkey's paw])>0&&get_property("_monkeyPawWishesUsed").to_int()<5){
+							cli_execute("monkeypaw effect offhand remarkable");
+						}else{
+							retrieve_item($item[pocket wish],1);
+							cli_execute("genie effect offhand remarkable");
+						}
+					}
+
+					visit_url('place.php?whichplace=ioty2014_wolf&action=wolf_houserun'); 
+					set_property("housesEaten","0");
+					use_skill($skill[Puff]);
+					while(in_multi_fight()){
+						run_combat();
+					}
+					
+					while(get_property("_sweatOutSomeBoozeUsed").to_int()<3&&get_property("sweat").to_int()>24&&my_inebriety()>0){
+						cli_execute('/cast sweat out some booze');
+					}
+					if(get_property("sweat").to_int()>49){
+						cli_execute('/cast make sweat-ade');
+					}
+					if(get_property("sweat").to_int()>49){
+						cli_execute('/cast make sweat-ade');
+					}
+					
+					while(my_hp()<my_maxhp() && get_property("wolfScore").to_int()<get_property("unleashThreshold").to_int()){
+						use_skill($skill[cannelloni cocoon]);
+					}
+					
+
+					if(get_property("_juneCleaverFightsLeft")=='0'){
+						adv1($location[Noob Cave],-1,"");
+					}
+
+				}
 			}
 			
 			if(item_amount($item[lupine appetite hormones])-lupines<2&&get_property("wolfScore").to_int()>=get_property("unleashThreshold").to_int()){
