@@ -8,23 +8,27 @@ To install, run the following command on an up-to-date KolMafia version:
 git checkout nasurte/lupine-collector release
 ```
 ## Requirements
-At the moment, the script will not function without the following items and permed skills:
 
-- porquoise-handled sixgun
-- Transcendent Olfaction
-- Saucegeyser
-- Cannelloni Cocoon
-
-Also these are *highly* recommended to have:
+At the moment, the script is expected to break at some point or fail to generate lupine appetite hormones without the following items and permed skills:
 
 - HOA regulation book
 - Space Trip safety headphones
+- Gallapagosian Mating Call
+- Saucegeyser
+- Cannelloni Cocoon
+
+These are not essential, but highly recommended to have:
+
+- Transcendent Olfaction
 - red badge
 - water wings for babies
+- mushroom badge, if you don't ascend often
 - mafia thumb ring
+- porquoise-handled sixgun
 
-Not likely to matter, but might as well
+Not likely to matter, but might as well:
 
+- nosy nose
 - nasty rat mask
 - security flashlight, if you don't have an HOA book
 
@@ -35,7 +39,7 @@ To invoke the script, simply run the following command in the mafia GCLI:
 lupo 10
 ```
 Where "10" would be replaced by the number of grimstone masks you'd like to use (each one takes 34 adventures to finish at base, but might take 1-3 adventures less, depending on some factors.)
-There are additionally some prefs you can set and args you can pass to the script, listed when running `lupo help` and also below:
+There are additionally some prefs you can set and args you can pass to the script, (e.g, `lupo 5 knapsack continue`) listed when running `lupo help` and also below:
 
 ### `continue`
 
@@ -51,7 +55,7 @@ The default house combat logic is kinda basic and sometimes suboptimal as a resu
 
 ### unleashThreshold
 
-The most important setting, which is why it's last in the readme. The score thresholds for receiving lupine appetite hormones at the end are determined by the scores of previous runs, so to keep this sustainable for as long as possible we want to do only the bare minimum. Sure, you can in theory spend resources you wouldn't otherwise need to spend and reach like 400 score, get the same amount of vials and no extra benefits over a run with a third of that score, and additionally shoot yourself in the foot cause now you have that monstrosity of an attempt to compete with going forward. The default value is 110, meaning we will stop trying to win house fights once our score has reached that point. The script will automatically bump that value up after every run that hits our threshold but only receives 1 vial of lupine appetite hormones, so in theory you only need to `set unleashThreshold` once. (I think it's like 160 at the time of writing this)
+The most important setting, which is why it's last in the readme. The score thresholds for receiving lupine appetite hormones at the end are determined by the scores of previous runs, so to keep this sustainable for as long as possible we want to do only the bare minimum. Sure, you can in theory spend resources you wouldn't otherwise need to spend and reach like 400 score, get the same amount of vials and no extra benefits over a run with a third of that score, and additionally shoot yourself in the foot cause now you have that monstrosity of an attempt to compete with going forward. The default value is 110, meaning we will stop trying to win house fights once our score has reached that point. The script will automatically bump that value up after every run that hits our threshold, but only receives 1 vial of lupine appetite hormones, so in theory you only need to `set unleashThreshold` once. (I think it's like 170 at the time of writing this)
 
 ## Q&A
 
@@ -65,7 +69,7 @@ Most of them honestly don't help *that* much here. Running `breakfast` before Lu
 
 > Lupo is stuck at 0 Breath and can't Unleash as a result!
 
-This situation happened exactly once when testing. Seemed like it resulted from a weird discrepancy between stats Mafia (and KoL itself) showed and the actual combat behaviour affected by those stats. Just rerun without `continue` and it should be fine. 
+This situation happened exactly once when testing. Seemed like it resulted from a weird discrepancy between stats Mafia (and KoL itself) showed and the actual combat behaviour affected by those stats. Just rerun without `continue`, and it should be fine. 
 
 > Best class?
 
