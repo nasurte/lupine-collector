@@ -19,7 +19,6 @@ At the moment, the script is expected to break at some point or fail to generate
 
 These are not essential, but highly recommended to have:
 
-- Transcendent Olfaction
 - red badge
 - water wings for babies
 - mushroom badge, if you don't ascend often
