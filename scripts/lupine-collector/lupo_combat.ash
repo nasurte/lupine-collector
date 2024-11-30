@@ -24,8 +24,10 @@ void main(int initround, monster foe, string page){
 		if(have_skill($skill[Gallapagosian Mating Call])&&!(get_property("_gallapagosMonster")=="Abcrusher 4000&trade;")){
 			use_skill($skill[Gallapagosian Mating Call]);
 		}
-		if (!(item_amount($item[porquoise-handled sixgun])==0)){
-			throw_item($item[porquoise-handled sixgun]);
+		catch{
+			if (!(item_amount($item[porquoise-handled sixgun])==0)){
+				throw_item($item[porquoise-handled sixgun]);
+			}
 		}
 		if(have_equipped($item[everfull dart holster])||have_equipped($item[jurassic parka])){
 			while(current_round()>0 && have_skill($skill[Darts: Aim for the Bullseye])) use_skill($skill[Darts: Aim for the Bullseye]);
@@ -39,8 +41,10 @@ void main(int initround, monster foe, string page){
 
 
 		case $monster[Escalatormaster&trade;]:
-		if (!(item_amount($item[porquoise-handled sixgun])==0)){
-			throw_item($item[porquoise-handled sixgun]);
+		catch{
+			if (!(item_amount($item[porquoise-handled sixgun])==0)){
+				throw_item($item[porquoise-handled sixgun]);
+			}
 		}
 		if(have_equipped($item[everfull dart holster])||have_equipped($item[jurassic parka])){
 			while(current_round()>0 && have_skill($skill[Darts: Aim for the Bullseye])) use_skill($skill[Darts: Aim for the Bullseye]);
@@ -59,8 +63,10 @@ void main(int initround, monster foe, string page){
 
 
 		case $monster[rack of free weights]:
-		if (!(item_amount($item[porquoise-handled sixgun])==0)){
-			throw_item($item[porquoise-handled sixgun]);
+		catch{
+			if (!(item_amount($item[porquoise-handled sixgun])==0)){
+				throw_item($item[porquoise-handled sixgun]);
+			}
 		}
 		if(have_equipped($item[everfull dart holster])||have_equipped($item[jurassic parka])){
 			while(current_round()>0 && have_skill($skill[Darts: Aim for the Bullseye])) use_skill($skill[Darts: Aim for the Bullseye]);
@@ -74,8 +80,10 @@ void main(int initround, monster foe, string page){
 
 
 		case $monster[treadmill]:
-		if (!(item_amount($item[porquoise-handled sixgun])==0)){
-			throw_item($item[porquoise-handled sixgun]);
+		catch{
+			if (!(item_amount($item[porquoise-handled sixgun])==0)){
+				throw_item($item[porquoise-handled sixgun]);
+			}
 		}
 		if(have_equipped($item[everfull dart holster])||have_equipped($item[jurassic parka])){
 			while(current_round()>0 && have_skill($skill[Darts: Aim for the Bullseye])) use_skill($skill[Darts: Aim for the Bullseye]);
