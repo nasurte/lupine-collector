@@ -23,6 +23,7 @@ if(count(args)>0 && args[0].to_lower_case().contains_text("help")){
 	}
 
 	//set ccs and such
+	set_auto_attack("none");
 	write_ccs((lupoKnapsack?to_buffer("consult lupo_combat_knapsack"):to_buffer("consult lupo_combat.ash")),"lupo");
 	cli_execute('ccs lupo'); 
 	if(get_property("unleashThreshold")=="") set_property("unleashThreshold","110");

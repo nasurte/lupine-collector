@@ -132,9 +132,11 @@ void main(int initround, monster foe, string page){
 
             
         case $monster[Escalatormaster&trade;]:
-            if (!(item_amount($item[porquoise-handled sixgun])==0)){
-                throw_item($item[porquoise-handled sixgun]);
-            }
+			catch{
+				if (!(item_amount($item[porquoise-handled sixgun])==0)){
+					throw_item($item[porquoise-handled sixgun]);
+				}
+			}
 			if(have_equipped($item[everfull dart holster])||have_equipped($item[jurassic parka])){
 				while(current_round()>0 && have_skill($skill[Darts: Aim for the Bullseye])) use_skill($skill[Darts: Aim for the Bullseye]);
 				if(current_round()>0 && have_skill($skill[Spit jurassic acid])) use_skill($skill[Spit jurassic acid]);
@@ -151,9 +153,11 @@ void main(int initround, monster foe, string page){
             break;
 
         case $monster[rack of free weights]:
-            if (!(item_amount($item[porquoise-handled sixgun])==0)){
-                throw_item($item[porquoise-handled sixgun]);
-            }
+			catch{
+				if (!(item_amount($item[porquoise-handled sixgun])==0)){
+					throw_item($item[porquoise-handled sixgun]);
+				}
+			}
 			if(have_equipped($item[everfull dart holster])||have_equipped($item[jurassic parka])){
 				while(current_round()>0 && have_skill($skill[Darts: Aim for the Bullseye])) use_skill($skill[Darts: Aim for the Bullseye]);
 				if(current_round()>0 && have_skill($skill[Spit jurassic acid])) use_skill($skill[Spit jurassic acid]);
@@ -165,9 +169,11 @@ void main(int initround, monster foe, string page){
             break;
 
         case $monster[treadmill]: 
-            if (!(item_amount($item[porquoise-handled sixgun])==0)){
-                throw_item($item[porquoise-handled sixgun]);
-            }
+			catch{
+				if (!(item_amount($item[porquoise-handled sixgun])==0)){
+					throw_item($item[porquoise-handled sixgun]);
+				}
+			}
 			if(have_equipped($item[everfull dart holster])||have_equipped($item[jurassic parka])){
 				while(current_round()>0 && have_skill($skill[Darts: Aim for the Bullseye])) use_skill($skill[Darts: Aim for the Bullseye]);
 				if(current_round()>0 && have_skill($skill[Spit jurassic acid])) use_skill($skill[Spit jurassic acid]);
