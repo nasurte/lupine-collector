@@ -43,9 +43,9 @@ if(count(args)>0 && args[0].to_lower_case().contains_text("help")){
 
 	int startingLupines=item_amount($item[lupine appetite hormones]);
 	int startingCologne=item_amount($item[Outer Wolf&trade; cologne]);
+	boolean lupoCombatStart=current_round()>0;
 	try{
 		for run from 1 to masks{
-			
 			print('Starting run #'+run+'!','blue');
 			int lupines=item_amount($item[lupine appetite hormones]);
 			
@@ -53,13 +53,16 @@ if(count(args)>0 && args[0].to_lower_case().contains_text("help")){
 				run_turn();
 				while(in_multi_fight()) run_combat();
 			}
-			if (!visit_url('place.php?whichplace=ioty2014_wolf').contains_text("Time Left: 30")&&!lupoContinue||(visit_url('place.php?whichplace=ioty2014_wolf').contains_text("All good things")&& run>1)){
 			
-				if(item_amount($item[grimstone mask])==0){
-					buy($item[grimstone mask],1,30000);
+			if (!(lupoContinue && visit_url('place.php?whichplace=ioty2014_wolf').contains_text("All good things")&& lupoCombatStart)){
+				
+				if(!visit_url('place.php?whichplace=ioty2014_wolf').contains_text("Time Left: 30")&&!lupoContinue||visit_url('place.php?whichplace=ioty2014_wolf').contains_text("All good things")){
+					if(item_amount($item[grimstone mask])==0){
+						buy($item[grimstone mask],1,30000);
+					}
+					set_property('choiceAdventure829',2);
+					use($item[grimstone mask]);
 				}
-				set_property('choiceAdventure829',2);
-				use($item[grimstone mask]);
 				
 				cli_execute('outfit birthday suit');
 		
@@ -273,6 +276,7 @@ if(count(args)>0 && args[0].to_lower_case().contains_text("help")){
 
 				}
 			}
+			lupoCombatStart=false;
 			
 			if(item_amount($item[lupine appetite hormones])-lupines<2&&get_property("wolfScore").to_int()>=get_property("unleashThreshold").to_int()){
 				if(item_amount($item[lupine appetite hormones])-lupines==1){
