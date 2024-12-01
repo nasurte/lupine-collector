@@ -36,10 +36,6 @@ if(count(args)>0 && args[0].to_lower_case().contains_text("help")){
 	set_property("hpAutoRecovery","0.05");
 	set_property("mpAutoRecoveryTarget","1.0");
 	set_property("mpAutoRecovery","0.3");
-	
-	cli_execute("mcd 0");
-	foreach buff in my_effects() if(buff.numeric_modifier("Monster Level")>0) cli_execute("shrug "+buff);
-	
 
 	int startingLupines=item_amount($item[lupine appetite hormones]);
 	int startingCologne=item_amount($item[Outer Wolf&trade; cologne]);
@@ -53,6 +49,10 @@ if(count(args)>0 && args[0].to_lower_case().contains_text("help")){
 				run_turn();
 				while(in_multi_fight()) run_combat();
 			}
+			
+			if(current_mcd()>0) cli_execute("mcd 0");
+			foreach buff in my_effects() if(buff.numeric_modifier("Monster Level")>0) cli_execute("shrug "+buff);
+			retrieve_item($item[ice house],1);
 			
 			if (!(lupoContinue && visit_url('place.php?whichplace=ioty2014_wolf').contains_text("All good things")&& lupoCombatStart)){
 				
@@ -284,7 +284,7 @@ if(count(args)>0 && args[0].to_lower_case().contains_text("help")){
 					set_property("unleashThreshold",to_string(get_property("unleashThreshold").to_int()+5));
 				}
 				else{
-					abort("what the hell");
+					abort("what the hell (failed to get any lupines from our run. looks like unleashThreshold might be set too low, see \"lupo help\" for details)");
 				}
 			}
 		}
